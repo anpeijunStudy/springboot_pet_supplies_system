@@ -7,6 +7,11 @@
         <result property="username" column="username" jdbcType="VARCHAR"/>
         <result property="password" column="password" jdbcType="VARCHAR"/>
     </resultMap>
+    <select id="selectById" resultType="com.cn.domain.User">
+        select *
+        from pet_user u
+        where u.id;
+    </select>
 
 </mapper>
 

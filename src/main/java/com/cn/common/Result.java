@@ -1,4 +1,4 @@
-package com.cn.controller;
+package com.cn.common;
 
 import lombok.Getter;
 import lombok.Setter;
