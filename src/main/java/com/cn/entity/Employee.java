@@ -1,7 +1,10 @@
 package com.cn.entity;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.io.Serializable;
 
@@ -49,18 +52,20 @@ public class Employee implements Serializable {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private LocalDateTime createTime;
     /**
      * 更新时间
      */
-    private Date updateTime;
+    private LocalDateTime updateTime;
     /**
      * 创建人
      */
+    @TableField(fill = FieldFill.INSERT)//插入填充字段
     private Long createUser;
     /**
      * 修改人
      */
+    @TableField(fill = FieldFill.INSERT_UPDATE)//插入和更新填充字段
     private Long updateUser;
 
 }
