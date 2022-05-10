@@ -2,6 +2,7 @@ package com.cn.entity;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -15,6 +16,7 @@ import java.io.Serializable;
  * @since 2022-05-10 23:57:26
  */
 @Data
+@TableName("pet_supplies_remark")
 public class Remark implements Serializable {
     private static final long serialVersionUID = 976597306068973250L;
     /**
