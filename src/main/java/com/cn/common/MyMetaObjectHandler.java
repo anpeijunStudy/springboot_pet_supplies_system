@@ -1,6 +1,7 @@
 package com.cn.common;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
+import com.cn.util.BaseContextUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
@@ -27,8 +28,9 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
 
         metaObject.setValue("createTime", LocalDateTime.now());
         metaObject.setValue("updateTime", LocalDateTime.now());
-        metaObject.setValue("createUser", new Long(1));
-        metaObject.setValue("updateUser", new Long(1));
+        metaObject.setValue("createUser", BaseContextUtils.getCurrentId());
+        metaObject.setValue("updateUser", BaseContextUtils.getCurrentId());
+        System.out.println(BaseContextUtils.getCurrentId());
     }
 
     /**
@@ -38,9 +40,13 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
      */
     @Override
     public void updateFill(MetaObject metaObject) {
+
+        long id = Thread.currentThread().getId();
+        log.info("线程ID{}" + id);
+
         log.info("公共字段自动填充[update]");
         log.info(metaObject.toString());
         metaObject.setValue("updateTime", LocalDateTime.now());
-        metaObject.setValue("createUser", new Long(1));
+        metaObject.setValue("createUser", BaseContextUtils.getCurrentId());
     }
 }

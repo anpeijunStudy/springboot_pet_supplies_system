@@ -17,7 +17,12 @@ import java.util.List;
 public interface EmployeeDao extends BaseMapper<Employee> {
 
     /**
-     * 查询账号密码*/
-    Employee selectAllByPasswordAndUsernameEmployee(@Param("username") String username,@Param("password")String password);
+     * 查询账号密码
+     *
+     * @param username 账号
+     * @param password 密码
+     * @return
+     */
+    Employee selectAllByPasswordAndUsernameEmployee(@Param("username") String username, @Param("password") String password);
 }
 

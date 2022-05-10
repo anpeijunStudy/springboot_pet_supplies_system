@@ -146,6 +146,10 @@ public class EmployeeController {
     @PutMapping
     public Result update(HttpServletRequest request, @RequestBody Employee employee) {
         log.info(employee.toString());
+
+        long id = Thread.currentThread().getId();
+        log.info("线程ID{}"+id);
+
         // 先修改修改时间
         employee.setUpdateTime(LocalDateTime.now());
         Long employeeId = (Long) request.getSession().getAttribute("employee");

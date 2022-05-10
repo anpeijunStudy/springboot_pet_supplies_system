@@ -1,5 +1,6 @@
 package com.cn.filter;
 
+import com.cn.util.BaseContextUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.AntPathMatcher;
 
@@ -28,6 +29,7 @@ public class LoginCheckFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         // 1-获取本次请求的URI
@@ -49,7 +51,17 @@ public class LoginCheckFilter implements Filter {
         }
         // 4-判断是否登录--根据session
         if (request.getSession().getAttribute("employee") != null) {
-            log.info("登录用户ID:" + request.getSession().getAttribute("employee"));
+            // 获取当前用户的ID
+            Long employeeId = (Long) request.getSession().getAttribute("employee");
+            log.info("登录用户ID:" + employeeId);
+
+            // 将用户ID存放到ThreadLocal中
+            BaseContextUtils.setCurrentId(employeeId);
+
+            // 输出当前用户的线程ID
+            long id = Thread.currentThread().getId();
+            log.info("线程ID{}" + id);
+
             filterChain.doFilter(request, response);
             return;
         }
