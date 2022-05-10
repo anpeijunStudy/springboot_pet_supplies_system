@@ -29,5 +29,28 @@ public interface EmployeeService {
      */
     boolean save(Employee employee);
 
+    /**
+     * 分页查询
+     *
+     * @param pageInfo
+     * @param queryWrapper
+     * @return
+     */
     Page page(Page pageInfo, LambdaQueryWrapper<Employee> queryWrapper);
+
+    /**
+     * 根据ID修改
+     *
+     * @param employee
+     * @return
+     */
+    boolean updateByID(Employee employee);
+
+    /**
+     * 根据ID查询员工
+     *
+     * @param id 员工ID
+     * @return
+     */
+    Employee getByID(Integer id);
 }

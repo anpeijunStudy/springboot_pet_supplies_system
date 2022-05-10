@@ -52,10 +52,12 @@ public class Employee implements Serializable {
     /**
      * 创建时间
      */
+    @TableField(fill = FieldFill.INSERT)//插入填充字段
     private LocalDateTime createTime;
     /**
      * 更新时间
      */
+    @TableField(fill = FieldFill.INSERT_UPDATE)//插入和更新填充字段
     private LocalDateTime updateTime;
     /**
      * 创建人

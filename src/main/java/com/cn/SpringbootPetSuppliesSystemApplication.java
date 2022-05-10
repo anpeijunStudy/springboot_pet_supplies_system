@@ -7,7 +7,7 @@ import org.springframework.boot.web.servlet.ServletComponentScan;
 
 @Slf4j
 @SpringBootApplication
-@ServletComponentScan // 扫描过滤器
+//@ServletComponentScan // 扫描过滤器
 public class SpringbootPetSuppliesSystemApplication {
 
     public static void main(String[] args) {

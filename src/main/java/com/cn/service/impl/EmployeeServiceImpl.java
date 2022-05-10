@@ -40,4 +40,14 @@ public class EmployeeServiceImpl implements EmployeeService {
         Page page = employeeDao.selectMapsPage(pageInfo, queryWrapper);
         return page;
     }
+
+    @Override
+    public boolean updateByID(Employee employee) {
+        return employeeDao.updateById(employee) > 0;
+    }
+
+    @Override
+    public Employee getByID(Integer id) {
+        return employeeDao.selectById(id);
+    }
 }

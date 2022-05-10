@@ -55,7 +55,8 @@ public class EmployeeController {
             request.getSession().setAttribute("employee", selectEmployee.getId());
             System.out.println(request.getSession().getAttribute("employee"));
             System.out.println(selectEmployee);
-            return new Result(Code.POST_OK, selectEmployee.getUsername(), "登录成功");
+            // 遇见的问题-第一次返回了一个selectEmployee.getUsername导致后面的验证是否为admin没有通过
+            return new Result(Code.POST_OK, selectEmployee, "登录成功");
         }
     }
 
@@ -106,6 +107,7 @@ public class EmployeeController {
 //            return new Result(Code.POST_ERR, null, "添加失败");
 //
 //        }
+        // 会由异常捕获器统一去处理
         boolean save = employeeService.save(employee);
         return new Result(Code.POST_OK, null, "添加成功");
     }
@@ -127,13 +129,46 @@ public class EmployeeController {
         LambdaQueryWrapper<Employee> queryWrapper = new LambdaQueryWrapper();
         // 添加过滤条件
         queryWrapper.like(name != null, Employee::getName, name);
-        queryWrapper.orderByDesc(Employee::getCreateTime);
-//        queryWrapper.like(StringUtils.isEmpty(name), Employee::getName, name).orderByDesc(Employee::getUpdateTime);
+//        queryWrapper.orderByEsc(Employee::getId);// 需要降序
         // 执行查询
         Page employeePage = employeeService.page(pageInfo, queryWrapper);
         System.out.println(employeePage);
 
         return new Result(Code.GET_OK, employeePage, "查询成功");
+    }
+
+    /**
+     * 根据id修改员工信息
+     *
+     * @param employee 传过来的员工信息
+     * @return
+     */
+    @PutMapping
+    public Result update(HttpServletRequest request, @RequestBody Employee employee) {
+        log.info(employee.toString());
+        // 先修改修改时间
+        employee.setUpdateTime(LocalDateTime.now());
+        Long employeeId = (Long) request.getSession().getAttribute("employee");
+        // 修改人
+        employee.setUpdateUser(employeeId);
+        // 再根据ID修改其他信息
+        boolean update = employeeService.updateByID(employee);
+
+        // 根据查询返回结果返回前台效果
+        if (update) {
+            return new Result(Code.UPDATE_OK, null, "修改成功");
+        } else {
+            return new Result(Code.UPDATE_ERR, null, "修改失败");
+        }
+    }
+
+    @GetMapping("/{id}")
+    public Result getByID(@PathVariable Integer id) {
+        Employee employee = employeeService.getByID(id);
+        log.info("根据ID查询员工信息");
+        // 密码空值
+        employee.setPassword(null);
+        return new Result(Code.GET_OK, employee, "查询成功");
     }
 }
 
