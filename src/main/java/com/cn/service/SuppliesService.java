@@ -1,5 +1,6 @@
 package com.cn.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cn.entity.Supplies;
 
 /**
@@ -10,4 +11,11 @@ import com.cn.entity.Supplies;
  */
 public interface SuppliesService {
 
+    /**
+     * 统计CategoryID的count
+     *
+     * @param suppliesLQW
+     * @return
+     */
+    Integer count(LambdaQueryWrapper<Supplies> suppliesLQW);
 }

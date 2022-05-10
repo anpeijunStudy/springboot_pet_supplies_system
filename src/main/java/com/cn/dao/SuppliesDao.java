@@ -14,7 +14,7 @@ import java.util.List;
  * @since 2022-05-10 20:12:40
  */
 @Mapper
-public interface SuppliesDao extends BaseMapper {
+public interface SuppliesDao extends BaseMapper<Supplies> {
 
 }
 

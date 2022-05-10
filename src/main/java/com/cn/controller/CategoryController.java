@@ -60,17 +60,33 @@ public class CategoryController {
         return new Result(Code.GET_OK, selectPage, "查询成功");
     }
 
+    /**
+     * 根据ID删除用户
+     *
+     * @param id
+     * @return
+     */
     @DeleteMapping
     public Result deleteId(Long id) {
         log.info("删除用户的id{}" + id);
         // 执行删除的方法
-        boolean delete = categoryService.delete(id);
-
+//        boolean delete = categoryService.delete(id);
+        boolean remove = categoryService.remove(id);
         // 判读影响行数
-        if (delete) {
+        if (remove) {
             return new Result(Code.DELETE_OK, null, "删除成功");
         } else {
             return new Result(Code.DELETE_ERR, null, "删除失败");
+        }
+    }
+
+    @PutMapping
+    public Result update(@RequestBody Category category) {
+        boolean update = categoryService.update(category);
+        if (update) {
+            return new Result(Code.UPDATE_OK, null, "修改成功");
+        } else {
+            return new Result(Code.UPDATE_ERR, null, "修改失败");
         }
     }
 }

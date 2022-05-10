@@ -37,4 +37,20 @@ public interface CategoryService {
      * @return
      */
     boolean delete(Long id);
+
+    /**
+     * 根据ID去移除相应的物品（观察所属关系）
+     *
+     * @param id
+     * @return
+     */
+    boolean remove(Long id);
+
+    /**
+     * 修改数据-本质上是根据ID修改
+     *
+     * @param category 修改数据
+     * @return
+     */
+    boolean update(Category category);
 }

@@ -1,5 +1,6 @@
 package com.cn.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cn.entity.Supplies;
 import com.cn.dao.SuppliesDao;
 import com.cn.service.SuppliesService;
@@ -18,4 +19,8 @@ public class SuppliesServiceImpl implements SuppliesService {
     @Resource
     private SuppliesDao suppliesDao;
 
+    @Override
+    public Integer count(LambdaQueryWrapper<Supplies> suppliesLQW) {
+        return suppliesDao.selectCount(suppliesLQW);
+    }
 }

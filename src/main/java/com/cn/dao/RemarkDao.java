@@ -1,20 +1,21 @@
 package com.cn.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.cn.entity.Setmeal;
+import com.cn.entity.Remark;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 /**
- * 团购(Setmeal)表数据库访问层
+ * 宠物用品关系表(Remark)表数据库访问层
  *
  * @author makejava
- * @since 2022-05-10 20:12:39
+ * @since 2022-05-10 23:57:26
  */
 @Mapper
-public interface SetmealDao extends BaseMapper<Setmeal> {
+public interface RemarkDao extends BaseMapper<Remark> {
+
 
 }
 

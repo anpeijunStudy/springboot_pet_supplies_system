@@ -1,6 +1,8 @@
 package com.cn.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cn.entity.Setmeal;
+import com.cn.entity.Supplies;
 
 /**
  * 团购(Setmeal)表服务接口
@@ -10,4 +12,11 @@ import com.cn.entity.Setmeal;
  */
 public interface SetmealService {
 
+
+    /**
+     * 查询CategroyId的Count
+     * @param setmealLQW
+     * @return
+     */
+    Integer count(LambdaQueryWrapper<Setmeal> setmealLQW);
 }

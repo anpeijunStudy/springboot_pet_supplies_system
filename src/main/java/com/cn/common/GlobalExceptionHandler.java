@@ -34,6 +34,5 @@ public class GlobalExceptionHandler {
             return new Result(Code.POST_ERR, null, split[2] + "账号重复");
         } else
             return new Result(Code.POST_ERR, null, "稍等片刻");
-
     }
 }
