@@ -12,6 +12,11 @@
         <result property="createUser" column="create_user" jdbcType="INTEGER"/>
         <result property="updateUser" column="update_user" jdbcType="INTEGER"/>
     </resultMap>
+    <select id="selectByIDReacheName" resultMap="CategoryMap">
+        select name
+        from pet_category
+        where id = #{categoryId};
+    </select>
 
 
 </mapper>

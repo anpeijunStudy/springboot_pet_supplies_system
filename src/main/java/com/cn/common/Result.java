@@ -1,5 +1,6 @@
 package com.cn.common;
 
+import com.cn.code.Code;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -26,5 +27,23 @@ public class Result {
         this.code = code;
         this.data = data;
         this.msg = msg;
+    }
+
+    /**
+     * 修改失败
+     *
+     * @return
+     */
+    public static Result updateErr() {
+        return new Result(Code.UPDATE_ERR, null, "修改失败");
+    }
+
+    /**
+     * 修改成功
+     *
+     * @return
+     */
+    public static Result updateOK() {
+        return new Result(Code.UPDATE_OK, null, "修改成功");
     }
 }

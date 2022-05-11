@@ -16,5 +16,11 @@ import java.util.List;
 @Mapper
 public interface CategoryDao extends BaseMapper<Category> {
 
+    /**
+     *  根据id查询得出用品名字
+     * @param categoryId
+     * @return
+     */
+    String selectByIDReacheName(Long categoryId);
 }
 

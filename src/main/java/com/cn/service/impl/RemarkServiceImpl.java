@@ -1,5 +1,6 @@
 package com.cn.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cn.entity.Remark;
 import com.cn.dao.RemarkDao;
 import com.cn.service.RemarkService;
@@ -27,5 +28,15 @@ public class RemarkServiceImpl implements RemarkService {
             remarkDao.insert(flavor);
         }
         return true;
+    }
+
+    @Override
+    public List<Remark> selectByIdList(LambdaQueryWrapper queryWrapper) {
+        return remarkDao.selectList(queryWrapper);
+    }
+
+    @Override
+    public boolean delete(LambdaQueryWrapper queryWrapper) {
+        return remarkDao.delete(queryWrapper) > 0;
     }
 }

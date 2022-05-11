@@ -20,6 +20,9 @@ public class SuppliesDto extends Supplies {
      */
     private List<Remark> flavors = new ArrayList<>();
 
+    /**
+     * 扩展的属性用来与前端的用品名称 交互
+     */
     private String categoryName;
 
     private Integer copies;

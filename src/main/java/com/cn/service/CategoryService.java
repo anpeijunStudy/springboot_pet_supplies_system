@@ -63,4 +63,12 @@ public interface CategoryService {
      * @return
      */
     List<Category> list(LambdaQueryWrapper<Category> queryWrapper);
+
+    /**
+     * 根据ID查询名称
+     *
+     * @param categoryId
+     * @return
+     */
+    Category selectByID(Long categoryId);
 }

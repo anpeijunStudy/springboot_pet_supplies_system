@@ -1,6 +1,7 @@
 package com.cn.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cn.dto.SuppliesDto;
 import com.cn.entity.Supplies;
 
@@ -21,9 +22,35 @@ public interface SuppliesService {
     Integer count(LambdaQueryWrapper<Supplies> suppliesLQW);
 
     /**
-     *  新增菜品（同时操作两张表pet_supplies和 pet_supplies_reamrk）
+     * 新增菜品（同时操作两张表pet_supplies和 pet_supplies_reamrk）
+     *
      * @param suppliesDto 数据
      * @return
      */
     boolean saveWithRemark(SuppliesDto suppliesDto);
+
+    /**
+     * 分页查询
+     *
+     * @param page
+     * @param queryWrapper
+     * @return
+     */
+    Page page(Page page, LambdaQueryWrapper<Supplies> queryWrapper);
+
+    /**
+     * 根据用户ID查询用户表和其对应的备注信息
+     *
+     * @param id
+     * @return
+     */
+    SuppliesDto getByIDCatchWithRemark(Long id);
+
+    /**
+     * 修改数据
+     *
+     * @param suppliesDto
+     * @return
+     */
+    boolean updateWithRemark(SuppliesDto suppliesDto);
 }

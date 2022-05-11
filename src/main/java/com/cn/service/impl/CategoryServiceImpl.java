@@ -80,4 +80,9 @@ public class CategoryServiceImpl implements CategoryService {
     public List<Category> list(LambdaQueryWrapper<Category> queryWrapper) {
         return categoryDao.selectList(queryWrapper);
     }
+
+    @Override
+    public Category selectByID(Long categoryId) {
+        return categoryDao.selectById(categoryId);
+    }
 }

@@ -1,12 +1,15 @@
 package com.cn.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cn.dto.SuppliesDto;
 import com.cn.entity.Remark;
 import com.cn.entity.Supplies;
 import com.cn.dao.SuppliesDao;
 import com.cn.service.RemarkService;
 import com.cn.service.SuppliesService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,5 +56,48 @@ public class SuppliesServiceImpl implements SuppliesService {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public Page page(Page page, LambdaQueryWrapper<Supplies> queryWrapper) {
+        return suppliesDao.selectPage(page, queryWrapper);
+    }
+
+    @Override
+    public SuppliesDto getByIDCatchWithRemark(Long id) {
+
+        // 查询用品信息
+        Supplies supplies = suppliesDao.selectById(id);
+        // 查询用品备注信息
+        Long suppliesId = supplies.getId();
+        // 条件查询
+        LambdaQueryWrapper<Remark> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(suppliesId != null, Remark::getPetSuppliesId, suppliesId);
+        List<Remark> remarks = remarkService.selectByIdList(queryWrapper);
+
+        // 使用对象拷贝
+        SuppliesDto suppliesDto = new SuppliesDto();
+        BeanUtils.copyProperties(supplies, suppliesDto);
+        suppliesDto.setFlavors(remarks);
+
+        return suppliesDto;
+    }
+
+    @Override
+    @Transactional
+    public boolean updateWithRemark(SuppliesDto suppliesDto) {
+        // 修改用品信息
+//        QueryWrapper<Supplies> suppliesQueryWrapper = new QueryWrapper<>();
+//        suppliesQueryWrapper.eq(suppliesDto!=null,SuppliesDto::getId,suppliesDto.getId());
+        System.out.println(suppliesDto);
+        int updateById = suppliesDao.updateById(suppliesDto);
+        // 修改用品备注信息-先删除再添加
+        LambdaQueryWrapper<Remark> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(suppliesDto.getId() != null, Remark::getPetSuppliesId, suppliesDto.getId());
+        boolean delete = remarkService.delete(queryWrapper);
+        List<Remark> flavors = suppliesDto.getFlavors();
+        remarkService.save(flavors);
+
+        return true;
     }
 }
