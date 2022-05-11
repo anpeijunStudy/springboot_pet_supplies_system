@@ -30,6 +30,42 @@ public class Result {
     }
 
     /**
+     * 添加失败
+     *
+     * @return
+     */
+    public static Result saveErr() {
+        return new Result(Code.SAVE_ERR, null, "添加失败");
+    }
+
+    /**
+     * 添加失败
+     *
+     * @return
+     */
+    public static Result saveOK() {
+        return new Result(Code.SAVE_OK, null, "添加成功");
+    }
+
+    /**
+     * 删除失败
+     *
+     * @return
+     */
+    public static Result deleteErr() {
+        return new Result(Code.DELETE_ERR, null, "删除失败");
+    }
+
+    /**
+     * 删除成功
+     *
+     * @return
+     */
+    public static Result deleteOK() {
+        return new Result(Code.DELETE_OK, null, "删除成功");
+    }
+
+    /**
      * 修改失败
      *
      * @return
@@ -45,5 +81,41 @@ public class Result {
      */
     public static Result updateOK() {
         return new Result(Code.UPDATE_OK, null, "修改成功");
+    }
+
+    /**
+     * 查询失败
+     *
+     * @return
+     */
+    public static Result getErr() {
+        return new Result(Code.GET_ERR, null, "查询失败");
+    }
+
+    /**
+     * 查询成功
+     *
+     * @return
+     */
+    public static Result getOK() {
+        return new Result(Code.GET_OK, null, "查询成功");
+    }
+
+    /**
+     * 请求失败
+     *
+     * @return
+     */
+    public static Result postErr() {
+        return new Result(Code.POST_ERR, null, "请求失败");
+    }
+
+    /**
+     * 请求成功
+     *
+     * @return
+     */
+    public static Result postOK() {
+        return new Result(Code.POST_OK, null, "请求成功");
     }
 }

@@ -7,7 +7,13 @@ package com.cn.code;
  * @since 2022-05-03 16:37:21
  */
 public class Code {
+    /**
+     * SAVE_OK添加成功
+     */
     public static final Integer SAVE_OK = 20011;
+    /**
+     * DELETE_OK删除成功
+     */
     public static final Integer DELETE_OK = 20021;
     /**
      * UPDATE——OK修改成功
@@ -22,7 +28,13 @@ public class Code {
      */
     public static final Integer POST_OK = 20051;
 
+    /**
+     * SAVE_ERR添加失败
+     */
     public static final Integer SAVE_ERR = 20010;
+    /**
+     * DELETE_ERR删除失败
+     */
     public static final Integer DELETE_ERR = 20020;
     /**
      * UPDATE——ERR修改失败

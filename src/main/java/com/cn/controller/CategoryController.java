@@ -8,10 +8,8 @@ import com.cn.entity.Category;
 import com.cn.service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -75,9 +73,9 @@ public class CategoryController {
         boolean remove = categoryService.remove(id);
         // 判读影响行数
         if (remove) {
-            return new Result(Code.DELETE_OK, null, "删除成功");
+            return Result.deleteOK();
         } else {
-            return new Result(Code.DELETE_ERR, null, "删除失败");
+            return Result.deleteErr();
         }
     }
 
@@ -91,9 +89,9 @@ public class CategoryController {
     public Result update(@RequestBody Category category) {
         boolean update = categoryService.update(category);
         if (update) {
-            return new Result(Code.UPDATE_OK, null, "修改成功");
+            return Result.updateOK();
         } else {
-            return new Result(Code.UPDATE_ERR, null, "修改失败");
+            return Result.updateErr();
         }
     }
 

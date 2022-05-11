@@ -454,7 +454,7 @@
                         let params = {...this.ruleForm}
                         // params.flavors = this.dishFlavors
                         params.status = this.ruleForm ? 1 : 0
-                        params.price *= 1
+                        params.price *= 100
                         params.categoryId = this.ruleForm.categoryId
                         params.flavors = this.dishFlavors.map(obj => ({...obj, value: JSON.stringify(obj.value)}))
                         delete params.dishFlavors

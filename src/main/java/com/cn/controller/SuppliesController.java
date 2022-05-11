@@ -6,14 +6,12 @@ import com.cn.code.Code;
 import com.cn.common.Result;
 import com.cn.dto.SuppliesDto;
 import com.cn.entity.Category;
-import com.cn.entity.Employee;
 import com.cn.entity.Supplies;
 import com.cn.service.CategoryService;
 import com.cn.service.RemarkService;
 import com.cn.service.SuppliesService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
