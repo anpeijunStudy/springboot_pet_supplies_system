@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cn.entity.Category;
 
+import java.util.List;
+
 /**
  * 用品及团购分类(Category)表服务接口
  *
@@ -53,4 +55,12 @@ public interface CategoryService {
      * @return
      */
     boolean update(Category category);
+
+    /**
+     * 根据type来查询对应的用品或者团购信息
+     *
+     * @param queryWrapper 封装type和排序
+     * @return
+     */
+    List<Category> list(LambdaQueryWrapper<Category> queryWrapper);
 }

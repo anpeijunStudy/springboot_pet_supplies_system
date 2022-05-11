@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 用品及团购分类(Category)表控制层
@@ -80,6 +81,12 @@ public class CategoryController {
         }
     }
 
+    /**
+     * 修改用品或团购信息-根据ID
+     *
+     * @param category 数据
+     * @return
+     */
     @PutMapping
     public Result update(@RequestBody Category category) {
         boolean update = categoryService.update(category);
@@ -88,6 +95,23 @@ public class CategoryController {
         } else {
             return new Result(Code.UPDATE_ERR, null, "修改失败");
         }
+    }
+
+    /**
+     * 根据type来查询用品或者团购种类
+     *
+     * @param category 封装type
+     * @return
+     */
+    @GetMapping("/list")
+    public Result list(Category category) {
+        // 条件查询
+        LambdaQueryWrapper<Category> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(category.getType() != null, Category::getType, category.getType());
+        queryWrapper.orderByAsc(Category::getSort).orderByDesc(Category::getUpdateTime);
+        // 查询
+        List<Category> list = categoryService.list(queryWrapper);
+        return new Result(Code.GET_OK, list, "查询成功");
     }
 }
 

@@ -1,6 +1,7 @@
 package com.cn.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.cn.dto.SuppliesDto;
 import com.cn.entity.Supplies;
 
 /**
@@ -18,4 +19,11 @@ public interface SuppliesService {
      * @return
      */
     Integer count(LambdaQueryWrapper<Supplies> suppliesLQW);
+
+    /**
+     *  新增菜品（同时操作两张表pet_supplies和 pet_supplies_reamrk）
+     * @param suppliesDto 数据
+     * @return
+     */
+    boolean saveWithRemark(SuppliesDto suppliesDto);
 }

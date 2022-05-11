@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 用品及团购分类(Category)表服务实现类
@@ -73,5 +74,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public boolean update(Category category) {
         return categoryDao.updateById(category) > 0;
+    }
+
+    @Override
+    public List<Category> list(LambdaQueryWrapper<Category> queryWrapper) {
+        return categoryDao.selectList(queryWrapper);
     }
 }
