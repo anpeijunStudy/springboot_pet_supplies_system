@@ -100,4 +100,21 @@ public class SuppliesServiceImpl implements SuppliesService {
 
         return true;
     }
+
+    @Override
+    public boolean delete(Integer[] ids) {
+        for (Integer id : ids) {
+            // 删除用品表
+            suppliesDao.deleteById(id);
+            // 根据用品ID删除用品备注表
+            LambdaQueryWrapper<Remark> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.eq(id != null, Remark::getPetSuppliesId, id);
+            try {
+                remarkService.delete(queryWrapper);
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+        return true;
+    }
 }

@@ -53,4 +53,11 @@ public interface SuppliesService {
      * @return
      */
     boolean updateWithRemark(SuppliesDto suppliesDto);
+
+    /**
+     * 批量删除用品（需要同时删除信息表）
+     * @param ids
+     * @return
+     */
+    boolean delete(Integer[] ids);
 }

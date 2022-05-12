@@ -131,12 +131,28 @@ public class SuppliesController {
     @PutMapping
     public Result update(@RequestBody SuppliesDto suppliesDto) {
         System.out.println(suppliesDto);
-            log.info(suppliesDto.toString());
+        log.info(suppliesDto.toString());
         boolean updateWithRemark = suppliesService.updateWithRemark(suppliesDto);
         if (updateWithRemark) {
             return Result.updateOK();
         } else {
             return Result.updateErr();
+        }
+    }
+
+    /**
+     * 删除用品
+     * @param ids
+     * @return
+     */
+    @DeleteMapping
+    public Result delete(Integer[] ids) {
+        boolean delete = suppliesService.delete(ids);
+
+        if (delete) {
+            return Result.deleteOK();
+        } else {
+            return Result.deleteErr();
         }
     }
 }
