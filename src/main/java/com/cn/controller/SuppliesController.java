@@ -142,6 +142,7 @@ public class SuppliesController {
 
     /**
      * 删除用品
+     *
      * @param ids
      * @return
      */
@@ -155,5 +156,50 @@ public class SuppliesController {
             return Result.deleteErr();
         }
     }
+
+    /**
+     * 起售
+     *
+     * @param ids
+     * @return
+     */
+    @PostMapping("/status/{state}")
+    public Result status(@PathVariable Integer state, Integer[] ids) {
+        System.out.println("修改的状态：" + state);
+        boolean updateStatus = suppliesService.updateStatus(ids, state);
+        if (updateStatus) {
+            return Result.updateOK();
+        } else {
+            return Result.updateErr();
+        }
+    }
+
+
+    /**
+     * 根据条件来查询对应的宠物用品
+     *
+     * @param supplies 数据
+     * @return
+     */
+    @GetMapping("/list")
+    public Result list(Supplies supplies) {
+        // 构造条件
+        LambdaQueryWrapper<Supplies> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(supplies != null, Supplies::getCategoryId, supplies.getCategoryId());
+        // 查询正在售卖的
+        queryWrapper.eq(Supplies::getStatus, 1);
+        queryWrapper.orderByAsc(Supplies::getSort).orderByDesc(Supplies::getUpdateTime);
+
+        // 查询supplies表中category_id对应的用品
+        List<Supplies> list = suppliesService.list(queryWrapper);
+
+        if (list != null) {
+            return new Result(Code.GET_OK, list, "查询成功");
+        } else {
+            return Result.getErr();
+        }
+
+    }
+
 }
 

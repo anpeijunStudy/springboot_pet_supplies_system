@@ -16,7 +16,7 @@
       <div class="tableBar">
         <el-input
           v-model="input"
-          placeholder="请输入套餐名称"
+          placeholder="请输入团购名称"
           style="width: 250px"
           clearable
           @keyup.enter.native="handleQuery"
@@ -40,7 +40,7 @@
             type="primary"
             @click="addSetMeal('add')"
           >
-            + 新建套餐
+            + 新建团购
           </el-button>
         </div>
       </div>
@@ -56,7 +56,7 @@
         ></el-table-column>
         <el-table-column
           prop="name"
-          label="套餐名称"
+          label="团购名称"
         ></el-table-column>
         <el-table-column prop="image" label="图片"  align="center">
           <template slot-scope="{ row }">
@@ -191,13 +191,13 @@
               window.parent.menuHandle({
                 id: '5',
                 url: '/static/backend/page/combo/add.html',
-                name: '添加套餐'
+                name: '添加团购'
               },true)
             } else {
               window.parent.menuHandle({
                 id: '5',
                 url: '/static/backend/page/combo/add.html?id='+st,
-                name: '修改套餐'
+                name: '修改团购'
               },true)
             }
           },
@@ -209,7 +209,7 @@
                 return this.$message.error('请选择删除对象')
               }
             }
-            this.$confirm('确定删除该套餐, 是否继续?', '确定删除', {
+            this.$confirm('确定删除该团购, 是否继续?', '确定删除', {
               'confirmButtonText': '确定',
               'cancelButtonText': '取消',
             }).then(() => {
@@ -231,7 +231,7 @@
             let params = {}
             if (typeof row === 'string' ){
               if (this.checkList.length == 0){
-                this.$message.error('批量操作，请先勾选操作菜品！')
+                this.$message.error('批量操作，请先勾选操作用品！')
                 return false
               }
               params.ids = this.checkList.join(',')
@@ -240,15 +240,15 @@
               params.ids = row.id
               params.status = row.status ? '0' : '1'
             }
-            this.$confirm('确认更改该套餐状态?', '提示', {
+            this.$confirm('确认更改该团购状态?', '提示', {
               'confirmButtonText': '确定',
               'cancelButtonText': '取消',
               'type': 'warning'
             }).then(() => {
               // 起售停售---批量起售停售接口
               setmealStatusByStatus(params).then(res => {
-                if (res.code === 1) {
-                  this.$message.success('套餐状态已经更改成功！')
+                if (res.code === 20031) {
+                  this.$message.success('团购状态已经更改成功！')
                   this.handleQuery()
                 } else {
                   this.$message.error(res.msg || '操作失败')

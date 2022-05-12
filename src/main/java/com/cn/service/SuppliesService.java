@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cn.dto.SuppliesDto;
 import com.cn.entity.Supplies;
 
+import java.util.List;
+
 /**
  * 宠物用品管理(Supplies)表服务接口
  *
@@ -60,4 +62,18 @@ public interface SuppliesService {
      * @return
      */
     boolean delete(Integer[] ids);
+
+    /***
+     * 用品起售或者停售
+     * @param ids
+     * @return
+     */
+    boolean updateStatus(Integer[] ids,Integer state);
+
+    /**
+     * 根据查询条件返回List结果
+     * @param queryWrapper
+     * @return
+     */
+    List<Supplies> list(LambdaQueryWrapper<Supplies> queryWrapper);
 }

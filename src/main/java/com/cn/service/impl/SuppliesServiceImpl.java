@@ -117,4 +117,17 @@ public class SuppliesServiceImpl implements SuppliesService {
         }
         return true;
     }
+
+    @Override
+    public boolean updateStatus(Integer[] ids, Integer state) {
+        for (Integer id : ids) {
+            return suppliesDao.updateByIdChangeStatus(id, state);
+        }
+        return true;
+    }
+
+    @Override
+    public List<Supplies> list(LambdaQueryWrapper<Supplies> queryWrapper) {
+        return suppliesDao.selectList(queryWrapper);
+    }
 }
