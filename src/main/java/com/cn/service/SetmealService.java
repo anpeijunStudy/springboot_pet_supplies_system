@@ -1,9 +1,9 @@
 package com.cn.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.cn.dto.StemealDto;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.cn.dto.SetmealDto;
 import com.cn.entity.Setmeal;
-import com.cn.entity.Supplies;
 
 /**
  * 团购(Setmeal)表服务接口
@@ -28,5 +28,23 @@ public interface SetmealService {
      * @param stemealDto
      * @return
      */
-    boolean saveWithSupplies(StemealDto stemealDto);
+    boolean saveWithSupplies(SetmealDto stemealDto);
+
+    /**
+     * 查询分页数据
+     *
+     * @param page
+     * @param pageSize
+     * @param name
+     * @return
+     */
+    Page page(Integer page, Integer pageSize, String name);
+
+    /**
+     * 删除团购表数据
+     *
+     * @param ids
+     * @return
+     */
+    boolean deleteWithSupplies(Long[] ids);
 }

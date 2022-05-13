@@ -26,11 +26,11 @@ public class SetmealSupplies implements Serializable {
     /**
      * 团购id
      */
-    private String setmealId;
+    private Long setmealId;
     /**
      * 用品id
      */
-    private String suppliesId;
+    private Long suppliesId;
     /**
      * 用品名称
      */

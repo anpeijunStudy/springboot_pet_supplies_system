@@ -9,8 +9,7 @@ import com.cn.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import java.util.List;
+
 
 /**
  * 员工信息(Employee)表服务实现类

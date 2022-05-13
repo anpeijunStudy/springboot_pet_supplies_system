@@ -1,16 +1,23 @@
 package com.cn.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.cn.dto.StemealDto;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.cn.exception.CustomException;
+import com.cn.dto.SetmealDto;
+import com.cn.entity.Category;
 import com.cn.entity.Setmeal;
 import com.cn.dao.SetmealDao;
-import com.cn.entity.Supplies;
+import com.cn.entity.SetmealSupplies;
+import com.cn.service.CategoryService;
 import com.cn.service.SetmealService;
 import com.cn.service.SetmealSuppliesService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 团购(Setmeal)表服务实现类
@@ -25,6 +32,8 @@ public class SetmealServiceImpl implements SetmealService {
 
     @Resource
     private SetmealSuppliesService setmealSuppliesService;
+    @Resource
+    private CategoryService categoryService;
 
     @Override
     public Integer count(LambdaQueryWrapper<Setmeal> setmealLQW) {
@@ -33,12 +42,73 @@ public class SetmealServiceImpl implements SetmealService {
 
     @Override
     @Transactional
-    public boolean saveWithSupplies(StemealDto stemealDto) {
+    public boolean saveWithSupplies(SetmealDto stemealDto) {
 
         // 保存基本团购信息
         int insert = setmealDao.insert(stemealDto);
         // 保存团购和宠物用品的关联信息
+        List<SetmealSupplies> setmealSuppliesList = stemealDto.getSetmealDishes();
+        for (SetmealSupplies setmealSupplies : setmealSuppliesList) {
+            setmealSupplies.setSetmealId(stemealDto.getId());
+            System.out.println(setmealSupplies);
+        }
+        setmealSuppliesService.saveBatch(setmealSuppliesList);
+        return true;
+    }
 
-        return false;
+    @Override
+    public Page page(Integer page, Integer pageSize, String name) {
+        // 查询分页数据-需要返回setmealDto(包含Setmeal和Cateproy)
+        Page<SetmealDto> setmealDtoPage = new Page<SetmealDto>();
+        // 查询pet_setmeal
+        Page<Setmeal> setmealPage = new Page<>(page, pageSize);
+        // 查询条件
+        LambdaQueryWrapper<Setmeal> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(name != null, Setmeal::getName, name);
+        Page<Setmeal> selectPage = setmealDao.selectPage(setmealPage, queryWrapper);
+        // 对象拷贝
+        BeanUtils.copyProperties(selectPage, setmealDtoPage, "records");
+
+        // 得到分页数据
+        List<Setmeal> records = selectPage.getRecords();
+        List<SetmealDto> setmealDtoList = new ArrayList<>();
+        // 将团购所属名称给具体团购
+        for (Setmeal record : records) {
+            SetmealDto setmealDto = new SetmealDto();
+
+            BeanUtils.copyProperties(record, setmealDto);
+
+            Long categoryId = record.getCategoryId();
+            Category category = categoryService.selectByID(categoryId);
+
+            setmealDto.setCategoryName(category.getName());
+
+            setmealDtoList.add(setmealDto);
+        }
+        setmealDtoPage.setRecords(setmealDtoList);
+        return setmealDtoPage;
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteWithSupplies(Long[] ids) {
+        // 首先判断是不是停售状态
+        LambdaQueryWrapper<Setmeal> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.in(Setmeal::getId,ids);
+        queryWrapper.eq(Setmeal::getStatus, 1);// 是否是起售的状态
+        Integer integer = setmealDao.selectCount(queryWrapper);
+
+        // 如果不能删除，抛出一个异常
+        if (integer > 0) {
+            throw new CustomException("套餐正在售卖中-不可删除");
+        }
+        // 如果可以删除，先删除关系表数据
+        LambdaQueryWrapper<Setmeal> deleteQueryWrapper = new LambdaQueryWrapper<>();
+        deleteQueryWrapper.in(Setmeal::getId,ids);
+        setmealDao.delete(deleteQueryWrapper);
+        // 删除套餐表数据
+        setmealSuppliesService.deleteBySetmealIds(ids);
+
+        return true;
     }
 }

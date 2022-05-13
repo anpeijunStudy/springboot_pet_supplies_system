@@ -33,27 +33,27 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     /**
-     * 员工登录
-     * <p>
-     * * @param request  存取Session
+     * 验证账号密码
      *
+     * @param request  存取Session
      * @param employee 获取username和password
      * @return
      */
     @PostMapping("/login")
     public Result login(HttpServletRequest request, @RequestBody Employee employee) {
 
-        // 查询数据库
+        // 查询数据库账号密码
         Employee selectEmployee = employeeService.select(employee.getUsername(), employee.getPassword());
 
         if (selectEmployee == null) {
-            return new Result(Code.POST_ERR, null, "登录失败");
-        } else if (selectEmployee.getStatus() == 0) {// 表示账号已经禁用
+            return Result.postErr();
+        } else if (selectEmployee.getStatus() == 0) {
+            // 表示账号已经禁用
             return new Result(Code.POST_ERR, null, "账号禁用");
-        } else {// 登录成功
+        } else {
+            // 登录成功
             // 将ID存入Session中
             request.getSession().setAttribute("employee", selectEmployee.getId());
-            System.out.println(request.getSession().getAttribute("employee"));
             System.out.println(selectEmployee);
             // 遇见的问题-第一次返回了一个selectEmployee.getUsername导致后面的验证是否为admin没有通过
             return new Result(Code.POST_OK, selectEmployee, "登录成功");
@@ -148,7 +148,7 @@ public class EmployeeController {
         log.info(employee.toString());
 
         long id = Thread.currentThread().getId();
-        log.info("线程ID{}"+id);
+        log.info("线程ID{}" + id);
 
         // 先修改修改时间
         employee.setUpdateTime(LocalDateTime.now());

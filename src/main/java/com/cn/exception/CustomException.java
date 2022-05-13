@@ -1,4 +1,4 @@
-package com.cn.common;
+package com.cn.exception;
 
 /**
  * @author 安珮军

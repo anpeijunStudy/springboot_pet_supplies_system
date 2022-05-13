@@ -1,6 +1,7 @@
 package com.cn.common;
 
 import com.cn.code.Code;
+import com.cn.exception.CustomException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -34,5 +35,11 @@ public class GlobalExceptionHandler {
             return new Result(Code.POST_ERR, null, split[2] + "账号重复");
         } else
             return new Result(Code.POST_ERR, null, "稍等片刻");
+    }
+
+    @ExceptionHandler(CustomException.class)
+    public Result exceptionHandler(CustomException e) {
+        log.error(e.getMessage());
+        return new Result(Code.GET_ERR, null, e.getMessage());
     }
 }

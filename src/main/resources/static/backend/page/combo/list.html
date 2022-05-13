@@ -170,7 +170,7 @@
               name: this.input ? this.input : undefined
             }
             await getSetmealPage(params).then(res => {
-              if (String(res.code) === '1') {
+              if (res.code === 20041) {
                 this.tableData = res.data.records || []
                 this.counts = res.data.total
               }
@@ -214,7 +214,7 @@
               'cancelButtonText': '取消',
             }).then(() => {
               deleteSetmeal(type === '批量' ? this.checkList.join(',') : id).then(res => {
-                if (res.code === 1) {
+                if (res.code === 20021) {
                   this.$message.success('删除成功！')
                   this.handleQuery()
                 } else {

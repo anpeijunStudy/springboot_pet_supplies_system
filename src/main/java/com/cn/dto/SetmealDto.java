@@ -13,7 +13,7 @@ import java.util.List;
  * @Description:
  */
 @Data
-public class StemealDto extends Setmeal {
+public class SetmealDto extends Setmeal {
 
     private List<SetmealSupplies> setmealDishes = new ArrayList<>();
 

@@ -532,7 +532,7 @@
                 prams.price *= 100
                 prams.setmealDishes = this.dishTable.map((obj) => ({
                   copies: obj.copies,
-                  dishId: obj.dishId,
+                  suppliesId: obj.suppliesId,
                   name: obj.name,
                   price: obj.price,
                 }))
@@ -658,7 +658,7 @@
                 }
                 let newArr = res.data;
                 newArr.forEach((n) => {
-                  n.dishId = n.id
+                  n.suppliesId = n.id
                   n.copies = 1
                   // n.dishCopies = 1
                   n.dishName = n.name
@@ -676,7 +676,7 @@
               if (res.code === 20041) {
                 let newArr = res.data
                 newArr.forEach((n) => {
-                  n.dishId = n.id
+                  n.suppliesId = n.id
                   n.dishName = n.name
                 })
                 this.dishAddList = newArr
