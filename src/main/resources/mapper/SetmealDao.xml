@@ -17,6 +17,11 @@
         <result property="updateUser" column="update_user" jdbcType="INTEGER"/>
         <result property="isDeleted" column="is_deleted" jdbcType="INTEGER"/>
     </resultMap>
+    <update id="updateByIdStatus">
+        update pet_setmeal
+        set status =#{state}
+        where id = #{id}
+    </update>
 
 
 </mapper>

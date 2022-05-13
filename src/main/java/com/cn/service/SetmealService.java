@@ -47,4 +47,30 @@ public interface SetmealService {
      * @return
      */
     boolean deleteWithSupplies(Long[] ids);
+
+    /**
+     * 修改售卖状态
+     *
+     * @param ids
+     * @param state
+     * @return
+     */
+    boolean updateStatus(Integer[] ids, int state);
+
+
+    /**
+     * 回显数据
+     *
+     * @param id
+     * @return
+     */
+    SetmealDto selectById(Long id);
+
+    /**
+     * 修改数据
+     *
+     * @param setmealDto
+     * @return
+     */
+    Boolean updateWithSetmealSupplie(SetmealDto setmealDto);
 }

@@ -26,11 +26,11 @@ public interface CategoryService {
     /**
      * 查询分页数据
      *
-     * @param categoryPage 分页值
-     * @param queryWrapper 条件值
+     * @param page
+     * @param pageSize
      * @return
      */
-    Page page(Page categoryPage, LambdaQueryWrapper<Category> queryWrapper);
+    Page page(Integer page, Integer pageSize);
 
     /**
      * 删除用品或者团购
@@ -56,17 +56,18 @@ public interface CategoryService {
      */
     boolean update(Category category);
 
+
     /**
      * 根据type来查询对应的用品或者团购信息
-     *
-     * @param queryWrapper 封装type和排序
+     * @param category 封装type和排序
      * @return
      */
-    List<Category> list(LambdaQueryWrapper<Category> queryWrapper);
+    List<Category> list(Category category);
 
     /**
      * 根据ID查询名称
      *
+     * 用品管理和团购管理的添加都需要回显数据展示
      * @param categoryId
      * @return
      */

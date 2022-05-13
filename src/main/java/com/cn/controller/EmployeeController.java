@@ -44,7 +44,9 @@ public class EmployeeController {
 
         // 查询数据库账号密码
         Employee selectEmployee = employeeService.select(employee.getUsername(), employee.getPassword());
+        log.info("员工" + selectEmployee.getName() + "尝试登录");
 
+        // 判断是否登录成功
         if (selectEmployee == null) {
             return Result.postErr();
         } else if (selectEmployee.getStatus() == 0) {
@@ -54,7 +56,10 @@ public class EmployeeController {
             // 登录成功
             // 将ID存入Session中
             request.getSession().setAttribute("employee", selectEmployee.getId());
-            System.out.println(selectEmployee);
+
+            // 密码设置为空
+            selectEmployee.setPassword(null);
+            log.info("员工" + selectEmployee.getName() + "登录成功");
             // 遇见的问题-第一次返回了一个selectEmployee.getUsername导致后面的验证是否为admin没有通过
             return new Result(Code.POST_OK, selectEmployee, "登录成功");
         }
@@ -71,6 +76,7 @@ public class EmployeeController {
 
         // 清除session中现在登录的员工ID
         request.getSession().removeAttribute("employee");
+
         return new Result(Code.POST_OK, null, "退出成功");
     }
 
@@ -82,9 +88,13 @@ public class EmployeeController {
      */
     @PostMapping
     public Result save(HttpServletRequest request, @RequestBody Employee employee) {
+
         log.info("新增员工-员工信息：{}" + employee);
         // 设置初始密码
         employee.setPassword("123456");
+
+/*
+         交给mybatis-plus的公共字段自动填充
         // 创建时间
         employee.setCreateTime(LocalDateTime.now());
         // 更新时间
@@ -93,21 +103,22 @@ public class EmployeeController {
         Long createUserId = (Long) request.getSession().getAttribute("employee");
         employee.setCreateUser(createUserId);
         // 更新人
-        employee.setUpdateUser(createUserId);
+        employee.setUpdateUser(createUserId);*/
 
+/*      // 判断是否添加成功-如果数据库有相同的username抛出异常
+        try {
+            // 如果成功的话按照向下
+            boolean save = employeeService.save(employee);
+            return new Result(Code.POST_OK, null, "添加成功");
+        } catch (Exception e) {
+            log.info("异常信息：" + e);
+        }finally {
+            // 最终会执行
+            return new Result(Code.POST_ERR, null, "添加失败");
+
+        }*/
         // 添加
-//        try {
-//            // 如果成功的话按照向下
-//            boolean save = employeeService.save(employee);
-//            return new Result(Code.POST_OK, null, "添加成功");
-//        } catch (Exception e) {
-//            log.info("异常信息：" + e);
-//        }finally {
-//            // 最终会执行
-//            return new Result(Code.POST_ERR, null, "添加失败");
-//
-//        }
-        // 会由异常捕获器统一去处理
+        // 异常会由异常捕获器统一去处理
         boolean save = employeeService.save(employee);
         return new Result(Code.POST_OK, null, "添加成功");
     }
@@ -122,17 +133,11 @@ public class EmployeeController {
      */
     @GetMapping("/page")
     public Result page(int page, int pageSize, String name) {
-        log.info("page={}" + page + "---pageSize{}" + pageSize + "---name{}" + name);
-        // 判断name是否有值
 
-        Page pageInfo = new Page(page, pageSize);
-        LambdaQueryWrapper<Employee> queryWrapper = new LambdaQueryWrapper();
-        // 添加过滤条件
-        queryWrapper.like(name != null, Employee::getName, name);
-//        queryWrapper.orderByEsc(Employee::getId);// 需要降序
+        log.info("员工信息表查询");
+
         // 执行查询
-        Page employeePage = employeeService.page(pageInfo, queryWrapper);
-        System.out.println(employeePage);
+        Page employeePage = employeeService.page(page, pageSize, name);
 
         return new Result(Code.GET_OK, employeePage, "查询成功");
     }
@@ -145,33 +150,36 @@ public class EmployeeController {
      */
     @PutMapping
     public Result update(HttpServletRequest request, @RequestBody Employee employee) {
-        log.info(employee.toString());
+        log.info(employee.getId()+"---"+employee.getName()+"修改信息");
 
-        long id = Thread.currentThread().getId();
-        log.info("线程ID{}" + id);
 
+/*
+        // 公共字段自动填充
         // 先修改修改时间
         employee.setUpdateTime(LocalDateTime.now());
         Long employeeId = (Long) request.getSession().getAttribute("employee");
         // 修改人
         employee.setUpdateUser(employeeId);
+*/
         // 再根据ID修改其他信息
         boolean update = employeeService.updateByID(employee);
 
-        // 根据查询返回结果返回前台效果
+        // 根据查询返回结果
         if (update) {
-            return new Result(Code.UPDATE_OK, null, "修改成功");
+            return Result.updateOK();
         } else {
-            return new Result(Code.UPDATE_ERR, null, "修改失败");
+            return Result.updateErr();
         }
     }
 
     @GetMapping("/{id}")
     public Result getByID(@PathVariable Integer id) {
+        log.info("员工"+id+"信息返回");
+        // 查询
         Employee employee = employeeService.getByID(id);
-        log.info("根据ID查询员工信息");
         // 密码空值
         employee.setPassword(null);
+
         return new Result(Code.GET_OK, employee, "查询成功");
     }
 }

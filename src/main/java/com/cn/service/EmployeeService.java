@@ -13,6 +13,7 @@ import java.util.List;
  * @since 2022-05-04 16:19:43
  */
 public interface EmployeeService {
+
     /**
      * 查询账号密码
      *
@@ -32,16 +33,17 @@ public interface EmployeeService {
     /**
      * 分页查询
      *
-     * @param pageInfo
-     * @param queryWrapper
+     * @param page
+     * @param pageSize
+     * @param name
      * @return
      */
-    Page page(Page pageInfo, LambdaQueryWrapper<Employee> queryWrapper);
+    Page page(int page, int pageSize, String name);
 
     /**
      * 根据ID修改
      *
-     * @param employee
+     * @param employee 修改员工信息
      * @return
      */
     boolean updateByID(Employee employee);

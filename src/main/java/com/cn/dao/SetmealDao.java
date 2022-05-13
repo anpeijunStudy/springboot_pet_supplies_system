@@ -16,5 +16,11 @@ import java.util.List;
 @Mapper
 public interface SetmealDao extends BaseMapper<Setmeal> {
 
+    /**
+     * 修改状态
+     * @param id
+     * @param state
+     */
+    void updateByIdStatus(@Param("id") Integer id, @Param("state") Integer state);
 }
 

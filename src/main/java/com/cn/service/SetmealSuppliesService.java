@@ -1,5 +1,6 @@
 package com.cn.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cn.entity.SetmealSupplies;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 public interface SetmealSuppliesService {
 
     /**
-     * 添加团购信息表
+     * 添加团购关系数据表
      *
      * @param setmealSuppliesList
      * @return
@@ -27,4 +28,20 @@ public interface SetmealSuppliesService {
      * @return
      */
     boolean deleteBySetmealIds(Long[] ids);
+
+    /**
+     * 查询数据
+     *
+     * @param queryWrapper
+     * @return
+     */
+    List<SetmealSupplies> selectList(LambdaQueryWrapper<SetmealSupplies> queryWrapper);
+
+    /**
+     * 根据条件删除关系表数据
+     *
+     * @param queryWrapper
+     * @return
+     */
+    boolean delete(LambdaQueryWrapper<SetmealSupplies> queryWrapper);
 }

@@ -29,31 +29,46 @@ import java.util.List;
 public class SetmealServiceImpl implements SetmealService {
     @Resource
     private SetmealDao setmealDao;
-
     @Resource
     private SetmealSuppliesService setmealSuppliesService;
     @Resource
     private CategoryService categoryService;
 
+    /**
+     * 查询CategroyId的Count
+     *
+     * @param setmealLQW
+     * @return
+     */
     @Override
     public Integer count(LambdaQueryWrapper<Setmeal> setmealLQW) {
         return setmealDao.selectCount(setmealLQW);
     }
 
+    /**
+     * 新增团购
+     *
+     * @param stemealDto
+     * @return
+     */
     @Override
     @Transactional
     public boolean saveWithSupplies(SetmealDto stemealDto) {
 
         // 保存基本团购信息
-        int insert = setmealDao.insert(stemealDto);
+        Integer insert = setmealDao.insert(stemealDto);
         // 保存团购和宠物用品的关联信息
         List<SetmealSupplies> setmealSuppliesList = stemealDto.getSetmealDishes();
         for (SetmealSupplies setmealSupplies : setmealSuppliesList) {
             setmealSupplies.setSetmealId(stemealDto.getId());
-            System.out.println(setmealSupplies);
         }
-        setmealSuppliesService.saveBatch(setmealSuppliesList);
-        return true;
+        // 添加
+        boolean saveBatch = setmealSuppliesService.saveBatch(setmealSuppliesList);
+        if (insert > 0 && saveBatch) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -94,7 +109,7 @@ public class SetmealServiceImpl implements SetmealService {
     public boolean deleteWithSupplies(Long[] ids) {
         // 首先判断是不是停售状态
         LambdaQueryWrapper<Setmeal> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.in(Setmeal::getId,ids);
+        queryWrapper.in(Setmeal::getId, ids);
         queryWrapper.eq(Setmeal::getStatus, 1);// 是否是起售的状态
         Integer integer = setmealDao.selectCount(queryWrapper);
 
@@ -104,11 +119,86 @@ public class SetmealServiceImpl implements SetmealService {
         }
         // 如果可以删除，先删除关系表数据
         LambdaQueryWrapper<Setmeal> deleteQueryWrapper = new LambdaQueryWrapper<>();
-        deleteQueryWrapper.in(Setmeal::getId,ids);
+        deleteQueryWrapper.in(Setmeal::getId, ids);
         setmealDao.delete(deleteQueryWrapper);
         // 删除套餐表数据
         setmealSuppliesService.deleteBySetmealIds(ids);
 
         return true;
+    }
+
+    /**
+     * 修改售卖状态
+     *
+     * @param ids
+     * @param state
+     * @return
+     */
+    @Override
+    public boolean updateStatus(Integer[] ids, int state) {
+        // 条件构造
+        for (Integer id : ids) {
+            setmealDao.updateByIdStatus(id, state);
+        }
+        // 修改
+        return true;
+    }
+
+    /**
+     * 回显数据
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public SetmealDto selectById(Long id) {
+
+        SetmealDto setmealDto = new SetmealDto();
+        // 查询pet_setmeal
+        Setmeal setmeal = setmealDao.selectById(id);
+        BeanUtils.copyProperties(setmeal, setmealDto);
+
+        // 查询pet_setmeal_supplies
+        LambdaQueryWrapper<SetmealSupplies> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SetmealSupplies::getSetmealId, id);
+        List<SetmealSupplies> setmealSupplies = setmealSuppliesService.selectList(queryWrapper);
+
+        setmealDto.setSetmealDishes(setmealSupplies);
+
+        return setmealDto;
+    }
+
+    /**
+     * 修改数据
+     *
+     * @param setmealDto
+     * @return
+     */
+    @Override
+    @Transactional
+    public Boolean updateWithSetmealSupplie(SetmealDto setmealDto) {
+        // 需要修改pet_setmeal和pet_setmeal_supplies
+
+        // 修改pet_setmeal
+        Integer updateByIdFlag = setmealDao.updateById(setmealDto);
+
+        // 修改pet_setmeal_supplies表
+        // 先删除-构造条件
+        LambdaQueryWrapper<SetmealSupplies> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(SetmealSupplies::getSetmealId, setmealDto.getId());
+        boolean deleteFlag = setmealSuppliesService.delete(queryWrapper);
+
+        // 添加数据
+        List<SetmealSupplies> setmealDishes = setmealDto.getSetmealDishes();
+        for (SetmealSupplies setmealDish : setmealDishes) {
+            setmealDish.setSetmealId(setmealDto.getId());
+        }
+        boolean saveBatch = setmealSuppliesService.saveBatch(setmealDishes);
+        if (deleteFlag && updateByIdFlag > 0 && saveBatch) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 }

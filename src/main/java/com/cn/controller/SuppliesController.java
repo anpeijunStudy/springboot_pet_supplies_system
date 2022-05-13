@@ -34,8 +34,6 @@ public class SuppliesController {
     @Resource
     private SuppliesService suppliesService;
     @Resource
-    private RemarkService remarkService;
-    @Resource
     private CategoryService categoryService;
 
 
@@ -47,8 +45,12 @@ public class SuppliesController {
      */
     @PostMapping
     public Result save(@RequestBody SuppliesDto suppliesDto) {
-        log.info("新增用品信息{}" + suppliesDto.toString());
+        log.info("新增用品信息{}" + suppliesDto.getId() + "---" + suppliesDto.getName());
+
+        // 添加
         boolean saveWithRemark = suppliesService.saveWithRemark(suppliesDto);
+
+        // 判断
         if (saveWithRemark) {
             return new Result(Code.POST_OK, null, "添加成功");
         } else {
@@ -66,42 +68,17 @@ public class SuppliesController {
      */
     @GetMapping("/page")
     public Result page(Integer page, Integer pageSize, String name) {
+        log.info("用品数据表信息展示{}");
 
-        Page<Supplies> pageCondition = new Page(page, pageSize);
-        Page<SuppliesDto> pageDtoCondition = new Page();
-        // 查询条件
-        LambdaQueryWrapper<Supplies> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(name != null, Supplies::getName, name);
-        queryWrapper.orderByDesc(Supplies::getUpdateTime);
+        // 查询
+        Page pageDtoData = suppliesService.pageDto(page, pageSize, name);
 
-        Page selectPage = suppliesService.page(pageCondition, queryWrapper);
-
-        // 对象拷贝-忽略records
-        BeanUtils.copyProperties(pageCondition, pageDtoCondition, "records");
-
-
-        List<Supplies> suppliesList = pageCondition.getRecords();
-        System.out.println(suppliesList);
-        List<SuppliesDto> suppliesDtoList = new ArrayList<>();
-
-        // 根据ID查询名称（category）
-        for (Supplies supplies : suppliesList) {
-            SuppliesDto suppliesDto = new SuppliesDto();
-
-            // 将普通属性全部拷贝
-            BeanUtils.copyProperties(supplies, suppliesDto);
-
-            Long categoryId = supplies.getCategoryId();// 得到categroy的ID
-            Category selectByIDName = categoryService.selectByID(categoryId);
-            suppliesDto.setCategoryName(selectByIDName.getName());
-            suppliesDtoList.add(suppliesDto);
+        // 判断
+        if (pageDtoData != null) {
+            return new Result(Code.GET_OK, pageDtoData, "查询成功");
+        } else {
+            return Result.getErr();
         }
-
-        // 设置pageDtoCondition的records
-        pageDtoCondition.setRecords(suppliesDtoList);
-
-//        System.out.println(pageDtoCondition);
-        return new Result(Code.GET_OK, pageDtoCondition, "查询成功");
     }
 
 
@@ -113,11 +90,16 @@ public class SuppliesController {
      */
     @GetMapping("{id}")
     public Result get(@PathVariable Long id) {
+        log.info("查询" + id + "用品信息");
+
+        // 查询
         SuppliesDto byIDCatchWithRemark = suppliesService.getByIDCatchWithRemark(id);
+
+        // 判断
         if (byIDCatchWithRemark != null) {
             return new Result(Code.GET_OK, byIDCatchWithRemark, "查询成功");
         } else {
-            return new Result(Code.GET_ERR, null, "查询失败");
+            return Result.getErr();
         }
     }
 
@@ -130,9 +112,11 @@ public class SuppliesController {
      */
     @PutMapping
     public Result update(@RequestBody SuppliesDto suppliesDto) {
-        System.out.println(suppliesDto);
         log.info(suppliesDto.toString());
+        // 修改
         boolean updateWithRemark = suppliesService.updateWithRemark(suppliesDto);
+
+        // 判断
         if (updateWithRemark) {
             return Result.updateOK();
         } else {
@@ -148,12 +132,36 @@ public class SuppliesController {
      */
     @DeleteMapping
     public Result delete(Integer[] ids) {
+        log.info("删除用品id{}" + ids.toString());
+
+        // 删除
         boolean delete = suppliesService.delete(ids);
 
+        // 判断
         if (delete) {
             return Result.deleteOK();
         } else {
             return Result.deleteErr();
+        }
+    }
+
+    /**
+     * 停售
+     *
+     * @param ids
+     * @return
+     */
+    @PostMapping("/status/0")
+    public Result status(Integer[] ids) {
+        log.info(ids.toString() + "停售");
+
+        // 修改
+        boolean updateStatus = suppliesService.updateStatus(ids, 0);
+
+        if (updateStatus) {
+            return Result.updateOK();
+        } else {
+            return Result.updateErr();
         }
     }
 
@@ -163,10 +171,13 @@ public class SuppliesController {
      * @param ids
      * @return
      */
-    @PostMapping("/status/{state}")
-    public Result status(@PathVariable Integer state, Integer[] ids) {
-        System.out.println("修改的状态：" + state);
-        boolean updateStatus = suppliesService.updateStatus(ids, state);
+    @PostMapping("/status/1")
+    public Result stop(Integer[] ids) {
+        log.info(ids.toString() + "起售");
+
+        // 修改
+        boolean updateStatus = suppliesService.updateStatus(ids, 1);
+
         if (updateStatus) {
             return Result.updateOK();
         } else {
@@ -183,15 +194,10 @@ public class SuppliesController {
      */
     @GetMapping("/list")
     public Result list(Supplies supplies) {
-        // 构造条件
-        LambdaQueryWrapper<Supplies> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(supplies != null, Supplies::getCategoryId, supplies.getCategoryId());
-        // 查询正在售卖的
-        queryWrapper.eq(Supplies::getStatus, 1);
-        queryWrapper.orderByAsc(Supplies::getSort).orderByDesc(Supplies::getUpdateTime);
+        log.info("开始查询supplies数据表");
 
         // 查询supplies表中category_id对应的用品
-        List<Supplies> list = suppliesService.list(queryWrapper);
+        List<Supplies> list = suppliesService.list(supplies);
 
         if (list != null) {
             return new Result(Code.GET_OK, list, "查询成功");

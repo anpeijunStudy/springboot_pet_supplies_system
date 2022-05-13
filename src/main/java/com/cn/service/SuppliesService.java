@@ -17,6 +17,7 @@ public interface SuppliesService {
 
     /**
      * 统计CategoryID的count
+     * 删除category需要统计
      *
      * @param suppliesLQW
      * @return
@@ -31,14 +32,6 @@ public interface SuppliesService {
      */
     boolean saveWithRemark(SuppliesDto suppliesDto);
 
-    /**
-     * 分页查询
-     *
-     * @param page
-     * @param queryWrapper
-     * @return
-     */
-    Page page(Page page, LambdaQueryWrapper<Supplies> queryWrapper);
 
     /**
      * 根据用户ID查询用户表和其对应的备注信息
@@ -58,6 +51,7 @@ public interface SuppliesService {
 
     /**
      * 批量删除用品（需要同时删除信息表）
+     *
      * @param ids
      * @return
      */
@@ -68,12 +62,22 @@ public interface SuppliesService {
      * @param ids
      * @return
      */
-    boolean updateStatus(Integer[] ids,Integer state);
+    boolean updateStatus(Integer[] ids, Integer state);
 
     /**
      * 根据查询条件返回List结果
-     * @param queryWrapper
+     * @param supplies
      * @return
      */
-    List<Supplies> list(LambdaQueryWrapper<Supplies> queryWrapper);
+    List<Supplies> list(Supplies supplies);
+
+    /**
+     * 分页查询
+     *
+     * @param page
+     * @param pageSize
+     * @param name
+     * @return suppliesDto
+     */
+    Page pageDto(Integer page, Integer pageSize, String name);
 }

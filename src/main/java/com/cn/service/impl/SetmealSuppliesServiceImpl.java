@@ -20,6 +20,12 @@ public class SetmealSuppliesServiceImpl implements SetmealSuppliesService {
     @Resource
     private SetmealSuppliesDao setmealSuppliesDao;
 
+    /**
+     * 添加团购关系数据表
+     *
+     * @param setmealSuppliesList
+     * @return
+     */
     @Override
     public boolean saveBatch(List<SetmealSupplies> setmealSuppliesList) {
 
@@ -36,5 +42,28 @@ public class SetmealSuppliesServiceImpl implements SetmealSuppliesService {
         queryWrapper.in(SetmealSupplies::getSetmealId, ids);
         setmealSuppliesDao.delete(queryWrapper);
         return true;
+    }
+
+    /**
+     * 查询数据
+     *
+     * @param queryWrapper
+     * @return
+     */
+    @Override
+    public List<SetmealSupplies> selectList(LambdaQueryWrapper<SetmealSupplies> queryWrapper) {
+        List<SetmealSupplies> setmealSupplies = setmealSuppliesDao.selectList(queryWrapper);
+        return setmealSupplies;
+    }
+
+    /**
+     * 根据条件删除关系表数据
+     *
+     * @param queryWrapper
+     * @return
+     */
+    @Override
+    public boolean delete(LambdaQueryWrapper<SetmealSupplies> queryWrapper) {
+        return setmealSuppliesDao.delete(queryWrapper) > 0;
     }
 }

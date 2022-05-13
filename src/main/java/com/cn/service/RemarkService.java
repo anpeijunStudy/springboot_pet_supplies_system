@@ -36,5 +36,5 @@ public interface RemarkService {
      * @param queryWrapper
      * @return
      */
-    boolean delete(LambdaQueryWrapper queryWrapper);
+    Integer delete(LambdaQueryWrapper queryWrapper);
 }
