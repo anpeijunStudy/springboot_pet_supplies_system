@@ -38,7 +38,12 @@ public class LoginCheckFilter implements Filter {
         String[] urls = new String[]{
                 "/employees/login",
                 "/employees/logout",
-                "/static/backend/**"
+                "/static/backend/api/**",
+                "/static/backend/page/login/**",
+                "/static/backend/js/**",
+                "/static/backend/images/**",
+                "/static/backend/plugins/**",
+                "/static/backend/styles/**",
         };
 
         // 2-检查登录状态(请求是否需要处理)
@@ -67,7 +72,7 @@ public class LoginCheckFilter implements Filter {
         }
         // 5-不符合放行请求
         log.info("执行跳转");
-        request.getRequestDispatcher("/static/backend/page/login/login.html").forward(request, response);
+        response.sendRedirect("/static/backend/page/login/login.html");
     }
 
     @Override
