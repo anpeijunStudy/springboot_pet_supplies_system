@@ -1,5 +1,6 @@
 package com.cn.service.impl;
 
+import com.alicp.jetcache.anno.Cached;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cn.dao.SetmealDao;
@@ -152,6 +153,7 @@ public class CategoryServiceImpl implements CategoryService {
      * @return
      */
     @Override
+//    @Cached(area = "pet",name="category",key = "#categoryId")
     public Category selectByID(Long categoryId) {
         return categoryDao.selectById(categoryId);
     }

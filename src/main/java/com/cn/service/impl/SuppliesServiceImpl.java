@@ -1,5 +1,8 @@
 package com.cn.service.impl;
 
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.CacheUpdate;
+import com.alicp.jetcache.anno.Cached;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -86,6 +89,7 @@ public class SuppliesServiceImpl implements SuppliesService {
      * @return
      */
     @Override
+    @Cached(area = "pet", name = "supplies", key = "#id", expire = 100,cacheType = CacheType.REMOTE)
     public SuppliesDto getByIDCatchWithRemark(Long id) {
 
         // 查询用品信息
@@ -119,6 +123,7 @@ public class SuppliesServiceImpl implements SuppliesService {
      */
     @Override
     @Transactional
+    @CacheUpdate(area = "pet",name="supplies",key = "#suppliesDto.id",value = "#suppliesDto")
     public boolean updateWithRemark(SuppliesDto suppliesDto) {
         // 需要同时修改pet_supplies和pet_supplies_remark
 
@@ -184,6 +189,7 @@ public class SuppliesServiceImpl implements SuppliesService {
 
     /**
      * 根据查询条件返回List结果
+     *
      * @param supplies
      * @return
      */

@@ -1,5 +1,10 @@
 package com.cn.service.impl;
 
+import com.alicp.jetcache.Cache;
+import com.alicp.jetcache.anno.CacheType;
+import com.alicp.jetcache.anno.CacheUpdate;
+import com.alicp.jetcache.anno.Cached;
+import com.alicp.jetcache.anno.CreateCache;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -7,7 +12,10 @@ import com.cn.entity.Employee;
 import com.cn.dao.EmployeeDao;
 import com.cn.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -20,6 +28,7 @@ import org.springframework.stereotype.Service;
 public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeDao employeeDao;
+
 
     /**
      * 查询账号密码
@@ -41,6 +50,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @param employee 新增员工信息
      */
     @Override
+    @CacheUpdate(name = "employee_", key = "#employee.id", value = "#employee")
     public boolean save(Employee employee) {
         return employeeDao.insert(employee) > 0;
     }
@@ -73,6 +83,7 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @return
      */
     @Override
+    @CacheUpdate(area = "pet",name = "employee_", key = "#employee.id", value = "#employee")
     public boolean updateByID(Employee employee) {
         return employeeDao.updateById(employee) > 0;
     }
@@ -84,7 +95,9 @@ public class EmployeeServiceImpl implements EmployeeService {
      * @return
      */
     @Override
+    @Cached(area = "pet", name = "employee_", key = "#id", expire = 100, cacheType = CacheType.REMOTE)
     public Employee getByID(Integer id) {
-        return employeeDao.selectById(id);
+        Employee employee = employeeDao.selectById(id);
+        return employee;
     }
 }
