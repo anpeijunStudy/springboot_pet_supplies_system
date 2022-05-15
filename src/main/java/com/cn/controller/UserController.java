@@ -1,29 +1,27 @@
 package com.cn.controller;
 
-
-import com.cn.domain.User;
+import com.cn.entity.User;
 import com.cn.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 
 /**
- * (User)表控制层
+ * 用户信息(User)表控制层
  *
- * @author springboot_pet_supplies_system
- * @since 2022-05-03 16:37:21
+ * @author makejava
+ * @since 2022-05-14 20:54:56
  */
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    @Autowired
+    /**
+     * 服务对象
+     */
+    @Resource
     private UserService userService;
 
-    @GetMapping
-    public void login(){
-        User byId = userService.getById(1);
-        System.out.println(byId);
-    }
+
 }
 

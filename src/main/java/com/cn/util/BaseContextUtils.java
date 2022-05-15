@@ -7,6 +7,7 @@ package com.cn.util;
  * 作用于某个线程之内
  */
 public class BaseContextUtils {
+
     private static ThreadLocal<Long> threadLocal = new ThreadLocal<>();
 
 

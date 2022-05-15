@@ -8,7 +8,7 @@
   display: flex;
 }
 .drawer-bg {
-  background: #000;
+  background: #000000;
   opacity: 0.3;
   width: 100%;
   top: 0;
@@ -93,7 +93,7 @@
   margin-left: 20px;
   width: 28px;
   font-size: 14px;
-  color: #ffc200;
+  color: #19c7d7;
   cursor: pointer;
 }
 
@@ -114,7 +114,7 @@
   padding: 0 8px;
   height: 100%;
   font-size: 18px;
-  color: #5a5e66;
+  color: #16c6ee;
   vertical-align: text-bottom;
 }
 .navbar .right-menu .right-menu-item.hover-effect {
@@ -255,7 +255,7 @@
 }
 
 .el-menu .el-menu-item.is-active {
-  background-color: #ffc200 !important;
+  background-color: #00f7ff !important;
   color: #333333 !important;
   border-radius: 0 21px 21px 0 !important;
 }

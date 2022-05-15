@@ -1,22 +1,13 @@
 package com.cn.service;
 
-
-import com.cn.domain.User;
-
+import com.cn.entity.User;
 /**
- * (User)表服务接口
+ * 用户信息(User)表服务接口
  *
- * @author springboot_pet_supplies_system
- * @since 2022-05-03 16:37:21
+ * @author makejava
+ * @since 2022-05-14 20:54:56
  */
 public interface UserService {
-    /**
-     * 根据ID获取book单条数据
-     *
-     * @param id
-     * @return Book
-     * {@code getById}
-     */
-    User getById(Integer id);
-}
 
+
+}
