@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @since 2022-05-10 20:12:40
  */
 @Data
-public class Setmeal implements Serializable {
+public class  Setmeal implements Serializable {
     private static final long serialVersionUID = 294721473043482407L;
     /**
      * 主键

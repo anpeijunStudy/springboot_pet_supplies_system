@@ -229,9 +229,9 @@ public class SuppliesServiceImpl implements SuppliesService {
 
         // 数据拷贝
         BeanUtils.copyProperties(selectSuppliesPage, suppliesDtoPage, "records");
-
         // 根据查询到的分页值中的category_id去查询所属类别并赋值
         List<Supplies> suppliesList = selectSuppliesPage.getRecords();
+
         ArrayList<SuppliesDto> suppliesDtoList = new ArrayList<>();
 
         for (Supplies supplies : suppliesList) {
