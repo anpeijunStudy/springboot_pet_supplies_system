@@ -36,7 +36,7 @@ function editEmployee (params) {
 // 修改页面反查详情接口
 function queryEmployeeById (id) {
   return $axios({
-    url: `/employees/${id}`,
+    url: '/employees/${id}',
     method: 'get'
   })
 }
